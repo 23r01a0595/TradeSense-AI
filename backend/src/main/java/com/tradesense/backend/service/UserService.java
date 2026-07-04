@@ -1,15 +1,16 @@
 package com.tradesense.backend.service;
 
-import java.util.List;
+import com.tradesense.backend.dto.UserRequestDTO;
+import com.tradesense.backend.dto.UserResponseDTO;
 
-import com.tradesense.backend.entity.User;
+import java.util.List;
 
 public interface UserService {
 
-    User saveUser(User user);
+    UserResponseDTO saveUser(UserRequestDTO userRequestDTO);
 
-    List<User> getAllUsers();
+    List<UserResponseDTO> getAllUsers();
 
-    User getUserById(Long id);
+    UserResponseDTO getUserById(Long id);
 
 }
