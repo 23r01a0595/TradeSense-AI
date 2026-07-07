@@ -1,9 +1,11 @@
 package com.tradesense.backend.service;
 
+import java.util.List;
+
+import com.tradesense.backend.dto.LoginRequestDTO;
+import com.tradesense.backend.dto.LoginResponseDTO;
 import com.tradesense.backend.dto.UserRequestDTO;
 import com.tradesense.backend.dto.UserResponseDTO;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -12,5 +14,7 @@ public interface UserService {
     List<UserResponseDTO> getAllUsers();
 
     UserResponseDTO getUserById(Long id);
+
+    LoginResponseDTO login(LoginRequestDTO request);
 
 }

@@ -1,14 +1,21 @@
 package com.tradesense.backend.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.tradesense.backend.dto.LoginRequestDTO;
+import com.tradesense.backend.dto.LoginResponseDTO;
 import com.tradesense.backend.dto.UserRequestDTO;
 import com.tradesense.backend.dto.UserResponseDTO;
 import com.tradesense.backend.entity.User;
+import com.tradesense.backend.exception.EmailAlreadyExistsException;
+import com.tradesense.backend.exception.InvalidCredentialsException;
+import com.tradesense.backend.jwt.JwtUtil;
 import com.tradesense.backend.repository.UserRepository;
 import com.tradesense.backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,8 +26,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
     public UserResponseDTO saveUser(UserRequestDTO dto) {
+
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
 
         User user = User.builder()
                 .fullName(dto.getFullName())
@@ -39,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDTO> getAllUsers() {
+
         return userRepository.findAll()
                 .stream()
                 .map(user -> UserResponseDTO.builder()
@@ -63,5 +78,21 @@ public class UserServiceImpl implements UserService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .build();
+    }
+
+    @Override
+    public LoginResponseDTO login(LoginRequestDTO request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new InvalidCredentialsException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        return new LoginResponseDTO(token);
     }
 }
