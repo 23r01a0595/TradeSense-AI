@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.tradesense.backend.dto.StockRequestDTO;
 import com.tradesense.backend.dto.StockResponseDTO;
 import com.tradesense.backend.entity.Stock;
+import com.tradesense.backend.exception.StockAlreadyExistsException;
+import com.tradesense.backend.exception.StockNotFoundException;
 import com.tradesense.backend.repository.StockRepository;
 import com.tradesense.backend.service.StockService;
 
@@ -19,7 +21,9 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public StockResponseDTO addStock(StockRequestDTO dto) {
-
+        if (stockRepository.existsBySymbol(dto.getSymbol())) {
+    throw new StockAlreadyExistsException("Stock with symbol " + dto.getSymbol() + " already exists.");
+}
         Stock stock = Stock.builder()
                 .companyName(dto.getCompanyName())
                 .symbol(dto.getSymbol())
@@ -59,11 +63,9 @@ public class StockServiceImpl implements StockService {
     @Override
     public StockResponseDTO getStockById(Long id) {
 
-        Stock stock = stockRepository.findById(id).orElse(null);
-
-        if (stock == null) {
-            return null;
-        }
+        Stock stock = stockRepository.findById(id)
+        .orElseThrow(() ->
+                new StockNotFoundException("Stock not found with id: " + id));
 
         return StockResponseDTO.builder()
                 .id(stock.getId())
@@ -78,11 +80,9 @@ public class StockServiceImpl implements StockService {
     @Override
     public StockResponseDTO updateStock(Long id, StockRequestDTO dto) {
 
-        Stock stock = stockRepository.findById(id).orElse(null);
-
-        if (stock == null) {
-            return null;
-        }
+        Stock stock = stockRepository.findById(id)
+        .orElseThrow(() ->
+                new StockNotFoundException("Stock not found with id: " + id));
 
         stock.setCompanyName(dto.getCompanyName());
         stock.setSymbol(dto.getSymbol());
@@ -103,8 +103,12 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void deleteStock(Long id) {
+public void deleteStock(Long id) {
 
-        stockRepository.deleteById(id);
-    }
+    Stock stock = stockRepository.findById(id)
+            .orElseThrow(() ->
+                    new StockNotFoundException("Stock not found with id: " + id));
+
+    stockRepository.delete(stock);
+}
 }
