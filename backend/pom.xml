@@ -29,13 +29,14 @@
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+	<!-- Spring AI BOM -->
+
 	<dependencies>
 		<!-- Spring Security -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
-
 <!-- JWT API -->
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
