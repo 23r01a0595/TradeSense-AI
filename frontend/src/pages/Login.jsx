@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { toast } from "react-hot-toast";
 
 function Login() {
 
@@ -25,10 +26,13 @@ function Login() {
             const response = await api.post("/auth/login", loginData);
 
             localStorage.setItem("token", response.data.token);
+localStorage.setItem("userId", response.data.userId);
+localStorage.setItem("fullName", response.data.fullName);
+localStorage.setItem("email", response.data.email);
 
-            alert("Login Successful");
+toast.success(`Welcome back, ${response.data.fullName}!`);
 
-            navigate("/dashboard");
+navigate("/dashboard");
 
         } catch (error) {
 

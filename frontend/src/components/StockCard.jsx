@@ -1,4 +1,4 @@
-function StockCard({ stock }) {
+function StockCard({ stock, onBuy }) {
   return (
     <div className="bg-slate-800 rounded-xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold text-white">
@@ -17,9 +17,12 @@ function StockCard({ stock }) {
         ₹{stock.currentPrice}
       </p>
 
-      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg mt-5">
-        Buy
-      </button>
+      <button
+  onClick={onBuy}
+  className="mt-6 w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-105 transition-all duration-300 text-white py-3 rounded-xl font-semibold shadow-lg"
+>
+  Buy Stock
+</button>
     </div>
   );
 }

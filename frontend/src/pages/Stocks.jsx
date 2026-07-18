@@ -1,38 +1,96 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { toast } from "react-hot-toast";
+
 import MainLayout from "../layouts/MainLayout";
 import StockCard from "../components/StockCard";
+import BuyStockModal from "../components/BuyStockModal";
+
 import { getStocks } from "../services/stocksService";
+import { buyStock } from "../services/portfolioService";
 
 function Stocks() {
   const [stocks, setStocks] = useState([]);
+  const [selectedStock, setSelectedStock] = useState(null);
 
-  useEffect(() => {
-    const fetchStocks = async () => {
-      try {
-        const data = await getStocks();
-        setStocks(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+ useEffect(() => {
+  const fetchStocks = async () => {
+    try {
+      const data = await getStocks();
+      setStocks(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load stocks");
+    }
+  };
 
-    fetchStocks();
-  }, []);
+  fetchStocks();
+}, []);
+
+  const handleBuy = async (stockId, quantity) => {
+  try {
+    const userId = Number(localStorage.getItem("userId"));
+
+    await buyStock({
+      userId,
+      stockId,
+      quantity,
+      buyPrice: selectedStock.currentPrice,
+    });
+
+    toast.success("Stock purchased successfully 🎉");
+
+    setSelectedStock(null);
+
+    const data = await getStocks();
+    setStocks(data);
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to purchase stock");
+  }
+};
 
   return (
     <MainLayout>
-      <h1 className="text-4xl font-bold text-white mb-8">
-        Stocks
-      </h1>
+      <div className="flex items-center justify-between mb-8">
 
-      <div className="grid grid-cols-3 gap-6">
+        <div>
+          <h1 className="text-4xl font-bold text-white">
+            Market Stocks
+          </h1>
+
+          <p className="text-slate-400 mt-2">
+            Buy stocks and build your portfolio.
+          </p>
+        </div>
+
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
         {stocks.map((stock) => (
           <StockCard
             key={stock.id}
             stock={stock}
+            onBuy={() => setSelectedStock(stock)}
           />
         ))}
+
       </div>
+
+      <AnimatePresence>
+
+        {selectedStock && (
+          <BuyStockModal
+            stock={selectedStock}
+            onClose={() => setSelectedStock(null)}
+            onBuy={handleBuy}
+          />
+        )}
+
+      </AnimatePresence>
+
     </MainLayout>
   );
 }
