@@ -1,13 +1,22 @@
-import { Landmark, TrendingUp } from "lucide-react";
+import { Landmark, TrendingUp, TrendingDown } from "lucide-react";
 
-function PortfolioCard({ item, onSell })  {
+function PortfolioCard({ item, onSell }) {
 
-    const investment =
-        (item.quantity * item.averageBuyPrice).toFixed(2);
+    const investment = item.quantity * item.averageBuyPrice;
+
+    const currentValue = item.quantity * item.currentPrice;
+
+    const profit = currentValue - investment;
+
+    const profitColor =
+        profit >= 0 ? "text-green-400" : "text-red-400";
+
+    const ProfitIcon =
+        profit >= 0 ? TrendingUp : TrendingDown;
 
     return (
 
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+        <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg hover:shadow-2xl hover:border-blue-500 transition-all duration-300">
 
             <div className="p-6">
 
@@ -34,11 +43,14 @@ function PortfolioCard({ item, onSell })  {
 
                     </div>
 
-                    <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-3 py-1 rounded-full">
+                    <div className="flex items-center gap-2 bg-green-500/20 px-3 py-1 rounded-full">
 
-                        <TrendingUp size={16} />
+                        <TrendingUp
+                            size={16}
+                            className="text-green-400"
+                        />
 
-                        <span className="text-sm font-semibold">
+                        <span className="text-green-400 text-sm font-semibold">
                             ACTIVE
                         </span>
 
@@ -63,7 +75,7 @@ function PortfolioCard({ item, onSell })  {
                     <div className="flex justify-between">
 
                         <span className="text-slate-400">
-                            Average Price
+                            Avg Price
                         </span>
 
                         <span className="text-green-400 font-semibold">
@@ -75,12 +87,54 @@ function PortfolioCard({ item, onSell })  {
                     <div className="flex justify-between">
 
                         <span className="text-slate-400">
-                            Investment
+                            Current Price
                         </span>
 
                         <span className="text-blue-400 font-semibold">
-                            ₹{investment}
+                            ₹{item.currentPrice.toFixed(2)}
                         </span>
+
+                    </div>
+
+                    <div className="flex justify-between">
+
+                        <span className="text-slate-400">
+                            Investment
+                        </span>
+
+                        <span className="text-white font-semibold">
+                            ₹{investment.toFixed(2)}
+                        </span>
+
+                    </div>
+
+                    <div className="flex justify-between">
+
+                        <span className="text-slate-400">
+                            Current Value
+                        </span>
+
+                        <span className="text-white font-semibold">
+                            ₹{currentValue.toFixed(2)}
+                        </span>
+
+                    </div>
+
+                    <div className="flex justify-between items-center">
+
+                        <span className="text-slate-400">
+                            Profit / Loss
+                        </span>
+
+                        <div className={`flex items-center gap-2 ${profitColor}`}>
+
+                            <ProfitIcon size={18} />
+
+                            <span className="font-bold">
+                                ₹{profit.toFixed(2)}
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -89,17 +143,17 @@ function PortfolioCard({ item, onSell })  {
                 <div className="grid grid-cols-2 gap-4 mt-8">
 
                     <button
-                        className="bg-blue-600 hover:bg-blue-700 rounded-xl py-3 font-semibold transition"
+                        className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold transition"
                     >
                         Buy More
                     </button>
 
                     <button
-    onClick={onSell}
-    className="bg-red-500 hover:bg-red-600 rounded-xl py-3 text-white font-semibold transition"
->
-    Sell Stock
-</button>
+                        onClick={onSell}
+                        className="bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 font-semibold transition"
+                    >
+                        Sell Stock
+                    </button>
 
                 </div>
 

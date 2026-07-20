@@ -71,7 +71,10 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .stockSymbol(saved.getStock().getSymbol())
                 .quantity(saved.getQuantity())
                 .averageBuyPrice(saved.getAverageBuyPrice())
+                .currentPrice(saved.getStock().getCurrentPrice())
                 .build();
+                
+                
     }
 
     @Override
@@ -97,17 +100,21 @@ public class PortfolioServiceImpl implements PortfolioService {
                     .stockSymbol(portfolio.getStock().getSymbol())
                     .quantity(0)
                     .averageBuyPrice(portfolio.getAverageBuyPrice())
+                    .currentPrice(portfolio.getStock().getCurrentPrice())
                     .build();
+                    
         }
 
         Portfolio updated = portfolioRepository.save(portfolio);
 
         return PortfolioResponseDTO.builder()
                 .id(updated.getId())
+                .stockId(updated.getStock().getId())
                 .companyName(updated.getStock().getCompanyName())
                 .stockSymbol(updated.getStock().getSymbol())
                 .quantity(updated.getQuantity())
                 .averageBuyPrice(updated.getAverageBuyPrice())
+                .currentPrice(updated.getStock().getCurrentPrice())
                 .build();
     }
 
@@ -123,7 +130,9 @@ public class PortfolioServiceImpl implements PortfolioService {
                         .stockSymbol(item.getStock().getSymbol())
                         .quantity(item.getQuantity())
                         .averageBuyPrice(item.getAverageBuyPrice())
+                        .currentPrice(item.getStock().getCurrentPrice())
                         .build())
+                        
                 .toList();
     }
 }

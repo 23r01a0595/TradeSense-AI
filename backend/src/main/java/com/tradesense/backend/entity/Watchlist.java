@@ -1,7 +1,5 @@
 package com.tradesense.backend.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,12 +27,10 @@ public class Watchlist {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "stock_id")
+    @JoinColumn(name = "stock_id", nullable = false)
     private Stock stock;
-
-    private LocalDateTime createdAt;
 }

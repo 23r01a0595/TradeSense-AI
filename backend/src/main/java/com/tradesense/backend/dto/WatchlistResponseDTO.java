@@ -1,7 +1,5 @@
 package com.tradesense.backend.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,11 +15,13 @@ public class WatchlistResponseDTO {
 
     private Long id;
 
-    private String userName;
-
-    private String stockSymbol;
+    private Long stockId;
 
     private String companyName;
 
-    private LocalDateTime createdAt;
+    private String stockSymbol;
+
+    private Double currentPrice;
+
+    private String sector;
 }

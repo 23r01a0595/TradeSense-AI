@@ -7,9 +7,9 @@ import com.tradesense.backend.dto.WatchlistResponseDTO;
 
 public interface WatchlistService {
 
-    WatchlistResponseDTO addToWatchlist(WatchlistRequestDTO dto);
+    WatchlistResponseDTO addStock(WatchlistRequestDTO dto);
 
-    List<WatchlistResponseDTO> getUserWatchlist(Long userId);
+    void removeStock(Long userId, Long stockId);
 
-    void removeFromWatchlist(Long id);
+    List<WatchlistResponseDTO> getWatchlist(Long userId);
 }

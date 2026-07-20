@@ -25,18 +25,22 @@ public class WatchlistController {
     private WatchlistService watchlistService;
 
     @PostMapping
-    public WatchlistResponseDTO addToWatchlist(@RequestBody WatchlistRequestDTO dto) {
-        return watchlistService.addToWatchlist(dto);
+    public WatchlistResponseDTO addStock(@RequestBody WatchlistRequestDTO dto) {
+        return watchlistService.addStock(dto);
     }
 
     @GetMapping("/{userId}")
-    public List<WatchlistResponseDTO> getUserWatchlist(@PathVariable Long userId) {
-        return watchlistService.getUserWatchlist(userId);
+    public List<WatchlistResponseDTO> getWatchlist(@PathVariable Long userId) {
+        return watchlistService.getWatchlist(userId);
     }
 
-    @DeleteMapping("/{id}")
-    public String removeFromWatchlist(@PathVariable Long id) {
-        watchlistService.removeFromWatchlist(id);
+    @DeleteMapping("/{userId}/{stockId}")
+    public String removeStock(
+            @PathVariable Long userId,
+            @PathVariable Long stockId) {
+
+        watchlistService.removeStock(userId, stockId);
+
         return "Stock removed from watchlist successfully.";
     }
 }

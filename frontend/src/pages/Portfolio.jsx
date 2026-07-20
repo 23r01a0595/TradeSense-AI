@@ -7,6 +7,8 @@ import { getPortfolio } from "../services/portfolioService";
 import SummaryCard from "../components/SummaryCard";
 import SellStockModal from "../components/SellStockModal";
 import { sellStock } from "../services/portfolioService";
+import PortfolioAnalytics from "../components/PortfolioAnalytics";
+import PortfolioCharts from "../components/PortfolioCharts";
 
 import {
     Briefcase,
@@ -45,7 +47,6 @@ function Portfolio() {
 };
 
 useEffect(() => {
-
     loadPortfolio();
 }, []);
     
@@ -149,6 +150,9 @@ useEffect(() => {
     />
 
 </div>
+
+<PortfolioAnalytics portfolio={portfolio} />
+<PortfolioCharts portfolio={portfolio} />
 
 {/* Portfolio Cards */}
 
