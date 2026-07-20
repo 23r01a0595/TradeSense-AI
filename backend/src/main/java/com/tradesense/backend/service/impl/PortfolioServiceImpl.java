@@ -66,6 +66,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         return PortfolioResponseDTO.builder()
                 .id(saved.getId())
+                .stockId(saved.getStock().getId())
                 .companyName(saved.getStock().getCompanyName())
                 .stockSymbol(saved.getStock().getSymbol())
                 .quantity(saved.getQuantity())
@@ -92,6 +93,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
             return PortfolioResponseDTO.builder()
                     .companyName(portfolio.getStock().getCompanyName())
+                    .stockId(portfolio.getStock().getId())
                     .stockSymbol(portfolio.getStock().getSymbol())
                     .quantity(0)
                     .averageBuyPrice(portfolio.getAverageBuyPrice())
@@ -117,6 +119,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .map(item -> PortfolioResponseDTO.builder()
                         .id(item.getId())
                         .companyName(item.getStock().getCompanyName())
+                        .stockId(item.getStock().getId())
                         .stockSymbol(item.getStock().getSymbol())
                         .quantity(item.getQuantity())
                         .averageBuyPrice(item.getAverageBuyPrice())

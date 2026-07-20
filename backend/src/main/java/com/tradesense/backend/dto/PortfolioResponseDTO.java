@@ -15,6 +15,8 @@ public class PortfolioResponseDTO {
 
     private Long id;
 
+    private Long stockId;
+    
     private String companyName;
 
     private String stockSymbol;
@@ -22,4 +24,5 @@ public class PortfolioResponseDTO {
     private Integer quantity;
 
     private Double averageBuyPrice;
+    
 }
