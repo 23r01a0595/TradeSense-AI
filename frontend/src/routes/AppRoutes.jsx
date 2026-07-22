@@ -8,6 +8,7 @@ import Portfolio from "../pages/Portfolio";
 import Watchlist from "../pages/Watchlist";
 import AIRecommendation from "../pages/AIRecommendation";
 
+
 function AppRoutes() {
   return (
     <Routes>
@@ -18,6 +19,7 @@ function AppRoutes() {
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/watchlist" element={<Watchlist />} />
       <Route path="/ai" element={<AIRecommendation />} />
+      
     </Routes>
   );
 }

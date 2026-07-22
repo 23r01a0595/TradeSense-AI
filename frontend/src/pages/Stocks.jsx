@@ -8,91 +8,139 @@ import BuyStockModal from "../components/BuyStockModal";
 
 import { getStocks } from "../services/stocksService";
 import { buyStock } from "../services/portfolioService";
+import { addToWatchlist } from "../services/watchlistService";
 
 function Stocks() {
-  const [stocks, setStocks] = useState([]);
-  const [selectedStock, setSelectedStock] = useState(null);
 
- useEffect(() => {
-  const fetchStocks = async () => {
-    try {
-      const data = await getStocks();
-      setStocks(data);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load stocks");
-    }
-  };
+    const [stocks, setStocks] = useState([]);
+    const [selectedStock, setSelectedStock] = useState(null);
 
-  fetchStocks();
-}, []);
+    const fetchStocks = async () => {
 
-  const handleBuy = async (stockId, quantity) => {
-  try {
-    const userId = Number(localStorage.getItem("userId"));
+        try {
 
-    await buyStock({
-      userId,
-      stockId,
-      quantity,
-      buyPrice: selectedStock.currentPrice,
-    });
+            const data = await getStocks();
 
-    toast.success("Stock purchased successfully 🎉");
+            setStocks(data);
 
-    setSelectedStock(null);
+        } catch (error) {
 
-    const data = await getStocks();
-    setStocks(data);
+            console.error(error);
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to purchase stock");
-  }
-};
+            toast.error("Failed to load stocks");
+        }
 
-  return (
-    <MainLayout>
-      <div className="flex items-center justify-between mb-8">
+    };
 
-        <div>
-          <h1 className="text-4xl font-bold text-white">
-            Market Stocks
-          </h1>
+    useEffect(() => {
 
-          <p className="text-slate-400 mt-2">
-            Buy stocks and build your portfolio.
-          </p>
-        </div>
+        fetchStocks();
 
-      </div>
+    }, []);
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    const handleBuy = async (stockId, quantity) => {
 
-        {stocks.map((stock) => (
-          <StockCard
-            key={stock.id}
-            stock={stock}
-            onBuy={() => setSelectedStock(stock)}
-          />
-        ))}
+        try {
 
-      </div>
+            const userId = Number(localStorage.getItem("userId"));
 
-      <AnimatePresence>
+            await buyStock({
+                userId,
+                stockId,
+                quantity,
+                buyPrice: selectedStock.currentPrice
+            });
 
-        {selectedStock && (
-          <BuyStockModal
-            stock={selectedStock}
-            onClose={() => setSelectedStock(null)}
-            onBuy={handleBuy}
-          />
-        )}
+            toast.success("Stock purchased successfully 🎉");
 
-      </AnimatePresence>
+            setSelectedStock(null);
 
-    </MainLayout>
-  );
+            fetchStocks();
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error("Failed to purchase stock");
+        }
+
+    };
+
+    const handleWatchlist = async (stock) => {
+
+        try {
+
+            const userId = Number(localStorage.getItem("userId"));
+
+            await addToWatchlist({
+                userId,
+                stockId: stock.id
+            });
+
+            toast.success(`${stock.companyName} added to Watchlist ⭐`);
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error("Stock already exists in Watchlist");
+
+        }
+
+    };
+
+    return (
+
+        <MainLayout>
+
+            <div className="flex items-center justify-between mb-8">
+
+                <div>
+
+                    <h1 className="text-4xl font-bold text-white">
+                        Market Stocks
+                    </h1>
+
+                    <p className="text-slate-400 mt-2">
+                        Buy stocks and build your portfolio.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+                {stocks.map((stock) => (
+
+                    <StockCard
+                        key={stock.id}
+                        stock={stock}
+                        onBuy={() => setSelectedStock(stock)}
+                        onWatchlist={handleWatchlist}
+                    />
+
+                ))}
+
+            </div>
+
+            <AnimatePresence>
+
+                {selectedStock && (
+
+                    <BuyStockModal
+                        stock={selectedStock}
+                        onClose={() => setSelectedStock(null)}
+                        onBuy={handleBuy}
+                    />
+
+                )}
+
+            </AnimatePresence>
+
+        </MainLayout>
+
+    );
 }
 
 export default Stocks;
