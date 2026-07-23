@@ -1,6 +1,17 @@
-import { Star } from "lucide-react";
+import { Star, TrendingUp, TrendingDown, Bot } from "lucide-react";
 
-function StockCard({ stock, onBuy, onWatchlist }) {
+function StockCard({
+    stock,
+    onBuy,
+    onWatchlist,
+    onAnalyze
+}) {
+
+    const livePrice = stock.livePrice ?? stock.currentPrice;
+    const change = stock.change ?? 0;
+    const changePercent = stock.changePercent ?? 0;
+
+    const isPositive = change >= 0;
 
     return (
 
@@ -43,25 +54,55 @@ function StockCard({ stock, onBuy, onWatchlist }) {
             <div className="mt-6">
 
                 <p className="text-gray-400">
-                    Current Price
+                    Live Price
                 </p>
 
                 <h2 className="text-3xl font-bold text-green-400 mt-1">
-                    ₹{stock.currentPrice.toFixed(2)}
+                    ₹{Number(livePrice).toFixed(2)}
                 </h2>
+
+                <div
+                    className={`flex items-center gap-2 mt-3 ${
+                        isPositive ? "text-green-400" : "text-red-400"
+                    }`}
+                >
+                    {isPositive
+                        ? <TrendingUp size={18}/>
+                        : <TrendingDown size={18}/>
+                    }
+
+                    <span className="font-semibold">
+                        {change.toFixed(2)} ({changePercent.toFixed(2)}%)
+                    </span>
+
+                </div>
 
             </div>
 
-            <button
-                onClick={onBuy}
-                className="mt-8 w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-105 transition-all duration-300 text-white py-3 rounded-xl font-semibold shadow-lg"
-            >
-                Buy Stock
-            </button>
+            <div className="grid grid-cols-2 gap-4 mt-8">
+
+                <button
+                    onClick={onBuy}
+                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-105 transition-all duration-300 text-white py-3 rounded-xl font-semibold"
+                >
+                    Buy Stock
+                </button>
+
+                <button
+                    onClick={() => onAnalyze(stock)}
+                    className="bg-purple-600 hover:bg-purple-700 transition text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+                >
+                    <Bot size={18} />
+
+                    AI Analyze
+                </button>
+
+            </div>
 
         </div>
 
     );
+
 }
 
 export default StockCard;

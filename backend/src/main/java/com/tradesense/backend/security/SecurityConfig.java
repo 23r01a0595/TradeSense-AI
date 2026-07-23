@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 @Configuration
 public class SecurityConfig {
 
@@ -30,45 +31,65 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-        .cors(cors -> {})
-        .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-        .requestMatchers(
-    "/api/auth/**",
-    "/api/ai/**",
-    "/api/dashboard/**"
-).permitAll()
-.anyRequest().authenticated()
-        
-)
-                .addFilterBefore(jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class)
+
+                        // Public APIs
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        .requestMatchers("/api/dashboard/**").permitAll()
+
+                        .requestMatchers("/api/dashboard-analytics/**").permitAll()
+                        
+                        .requestMatchers("/api/stocks/**").permitAll()
+
+                        .requestMatchers("/api/portfolio/**").permitAll()
+
+                        .requestMatchers("/api/watchlist/**").permitAll()
+
+                        .requestMatchers("/api/transactions/**").permitAll()
+
+                        .requestMatchers("/api/ai/**").permitAll()
+
+                        .requestMatchers("/api/live/**").permitAll()
+
+                        // All remaining APIs require authentication
+                        .anyRequest().authenticated()
+
+                )
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
+
     @Bean
-public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(
+                List.of("http://localhost:5173"));
 
-    configuration.setAllowedMethods(
-            List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(
+                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-    configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
-    configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-    source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
-    return source;
-}
+        return source;
+    }
 }

@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tradesense.backend.dto.AIRequestDTO;
-import com.tradesense.backend.dto.AIResponseDTO;
-import com.tradesense.backend.service.AIService;
+import com.tradesense.backend.service.OpenRouterService;
 
 @Service
-public class AIServiceImpl implements AIService {
+public class OpenRouterServiceImpl implements OpenRouterService {
 
     @Value("${openrouter.api.key}")
     private String apiKey;
@@ -25,40 +23,43 @@ public class AIServiceImpl implements AIService {
     private String apiUrl;
 
     private final HttpClient client = HttpClient.newHttpClient();
+
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public AIResponseDTO getRecommendation(AIRequestDTO request) {
+    public String analyzeStock(
+            String companyName,
+            String symbol,
+            Double currentPrice,
+            String sector) {
 
         try {
 
             String prompt = """
                     You are an expert stock market analyst.
 
-                    Analyze this stock.
+                    Analyze the following stock.
 
                     Company: %s
+                    Symbol: %s
                     Sector: %s
-                    Current Price: %.2f
+                    Current Price: ₹%.2f
 
-                    Return ONLY valid JSON.
+                    Give your response in this format:
 
-                    {
-                      "recommendation":"BUY",
-                      "reason":"Reason here",
-                      "risk":"LOW",
-                      "confidence":"90%%"
-                    }
-
-                    Return JSON only.
+                    Recommendation:
+                    Confidence:
+                    Risk:
+                    Reason:
                     """
                     .formatted(
-                            request.getCompanyName(),
-                            request.getSector(),
-                            request.getCurrentPrice()
+                            companyName,
+                            symbol,
+                            sector,
+                            currentPrice
                     );
 
-            String requestBody = """
+            String body = """
                     {
                       "model":"deepseek/deepseek-chat",
                       "messages":[
@@ -70,42 +71,30 @@ public class AIServiceImpl implements AIService {
                     }
                     """.formatted(mapper.writeValueAsString(prompt));
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiUrl))
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
                     .header("HTTP-Referer", "http://localhost:8080")
                     .header("X-Title", "TradeSense AI")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 
             HttpResponse<String> response =
-                    client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
 
             JsonNode root = mapper.readTree(response.body());
 
-            String aiResponse = root
-                    .get("choices")
+            return root.get("choices")
                     .get(0)
                     .get("message")
                     .get("content")
                     .asText();
-            aiResponse = aiResponse
-        .replace("```json", "")
-        .replace("```", "")
-        .trim();
 
-System.out.println("AI Response:");
-System.out.println(aiResponse);
-            return mapper.readValue(aiResponse, AIResponseDTO.class);
+        } catch (IOException | InterruptedException e) {
 
-        } catch (Exception e) {
+            throw new RuntimeException(e);
 
-    e.printStackTrace();
-
-    throw new RuntimeException("AI service failed: " + e.getMessage(), e);
-
-}
-
+        }
     }
 }

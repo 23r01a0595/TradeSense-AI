@@ -14,6 +14,7 @@ import com.tradesense.backend.repository.PortfolioRepository;
 import com.tradesense.backend.repository.StockRepository;
 import com.tradesense.backend.repository.UserRepository;
 import com.tradesense.backend.service.PortfolioService;
+import com.tradesense.backend.service.TransactionService;
 
 @Service
 public class PortfolioServiceImpl implements PortfolioService {
@@ -26,6 +27,9 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Override
     public PortfolioResponseDTO buyStock(PortfolioRequestDTO dto) {
@@ -64,6 +68,15 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         Portfolio saved = portfolioRepository.save(portfolio);
 
+        // Save BUY transaction
+        transactionService.saveTransaction(
+                dto.getUserId(),
+                dto.getStockId(),
+                dto.getQuantity(),
+                dto.getBuyPrice(),
+                "BUY"
+        );
+
         return PortfolioResponseDTO.builder()
                 .id(saved.getId())
                 .stockId(saved.getStock().getId())
@@ -73,8 +86,6 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .averageBuyPrice(saved.getAverageBuyPrice())
                 .currentPrice(saved.getStock().getCurrentPrice())
                 .build();
-                
-                
     }
 
     @Override
@@ -90,6 +101,15 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         portfolio.setQuantity(portfolio.getQuantity() - dto.getQuantity());
 
+        // Save SELL transaction
+        transactionService.saveTransaction(
+                dto.getUserId(),
+                dto.getStockId(),
+                dto.getQuantity(),
+                portfolio.getAverageBuyPrice(),
+                "SELL"
+        );
+
         if (portfolio.getQuantity() == 0) {
 
             portfolioRepository.delete(portfolio);
@@ -102,7 +122,6 @@ public class PortfolioServiceImpl implements PortfolioService {
                     .averageBuyPrice(portfolio.getAverageBuyPrice())
                     .currentPrice(portfolio.getStock().getCurrentPrice())
                     .build();
-                    
         }
 
         Portfolio updated = portfolioRepository.save(portfolio);
@@ -132,7 +151,6 @@ public class PortfolioServiceImpl implements PortfolioService {
                         .averageBuyPrice(item.getAverageBuyPrice())
                         .currentPrice(item.getStock().getCurrentPrice())
                         .build())
-                        
                 .toList();
     }
 }

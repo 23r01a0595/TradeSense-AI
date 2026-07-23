@@ -1,35 +1,150 @@
-import { Link } from "react-router-dom";
+import {
+    LayoutDashboard,
+    TrendingUp,
+    Briefcase,
+    Star,
+    ReceiptText,
+    Bot,
+    LogOut
+} from "lucide-react";
+
+import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
-  return (
-    <aside className="w-64 min-h-screen bg-slate-900 text-white p-6">
-      <h2 className="text-2xl font-bold mb-8">
-        TradeSense AI
-      </h2>
 
-      <nav className="flex flex-col gap-4">
-        <Link to="/dashboard" className="hover:text-blue-400">
-          Dashboard
-        </Link>
+    const location = useLocation();
 
-        <Link to="/stocks" className="hover:text-blue-400">
-          Stocks
-        </Link>
+    const menuItems = [
 
-        <Link to="/portfolio" className="hover:text-blue-400">
-          Portfolio
-        </Link>
+        {
+            name: "Dashboard",
+            path: "/dashboard",
+            icon: LayoutDashboard
+        },
+        {
+            name: "Market",
+            path: "/stocks",
+            icon: TrendingUp
+        },
+        {
+            name: "Portfolio",
+            path: "/portfolio",
+            icon: Briefcase
+        },
+        {
+            name: "Watchlist",
+            path: "/watchlist",
+            icon: Star
+        },
+        {
+            name: "Transactions",
+            path: "/transactions",
+            icon: ReceiptText
+        },
+        {
+            name: "AI Insights",
+            path: "/ai",
+            icon: Bot
+        }
 
-        <Link to="/watchlist" className="hover:text-blue-400">
-          Watchlist
-        </Link>
+    ];
 
-        <Link to="/ai" className="hover:text-blue-400">
-          AI Recommendation
-        </Link>
-      </nav>
-    </aside>
-  );
+    return (
+
+        <aside className="w-72 min-h-screen bg-slate-950 border-r border-slate-800 flex flex-col justify-between">
+
+            <div>
+
+                <div className="p-8 border-b border-slate-800">
+
+                    <h1 className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+
+                        TradeSense AI
+
+                    </h1>
+
+                    <p className="text-slate-400 mt-2 text-sm">
+
+                        AI Powered Trading Platform
+
+                    </p>
+
+                </div>
+
+                <nav className="mt-8 px-4">
+
+                    {menuItems.map((item) => {
+
+                        const Icon = item.icon;
+
+                        const active =
+                            location.pathname === item.path;
+
+                        return (
+
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`flex items-center gap-4 px-5 py-4 rounded-2xl mb-3 transition-all duration-300
+                                ${
+                                    active
+                                        ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg"
+                                        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                                }`}
+                            >
+
+                                <Icon size={22} />
+
+                                <span className="font-medium">
+
+                                    {item.name}
+
+                                </span>
+
+                            </Link>
+
+                        );
+
+                    })}
+
+                </nav>
+
+            </div>
+
+            <div className="p-6 border-t border-slate-800">
+
+                <div className="bg-slate-900 rounded-2xl p-4 mb-5">
+
+                    <p className="text-white font-semibold">
+
+                        Manikanta
+
+                    </p>
+
+                    <p className="text-green-400 text-sm mt-1">
+
+                        ● Online
+
+                    </p>
+
+                </div>
+
+                <button
+                    className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 transition-all text-white py-3 rounded-xl font-semibold"
+                >
+
+                    <LogOut size={20} />
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </aside>
+
+    );
+
 }
 
 export default Sidebar;

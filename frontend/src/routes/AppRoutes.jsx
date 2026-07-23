@@ -7,6 +7,7 @@ import Stocks from "../pages/Stocks";
 import Portfolio from "../pages/Portfolio";
 import Watchlist from "../pages/Watchlist";
 import AIRecommendation from "../pages/AIRecommendation";
+import TransactionHistory from "../pages/TransactionHistory";
 
 
 function AppRoutes() {
@@ -19,7 +20,10 @@ function AppRoutes() {
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/watchlist" element={<Watchlist />} />
       <Route path="/ai" element={<AIRecommendation />} />
-      
+      <Route
+    path="/transactions"
+    element={<TransactionHistory />}
+/>
     </Routes>
   );
 }
