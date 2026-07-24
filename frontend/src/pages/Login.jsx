@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-hot-toast";
 
@@ -21,25 +21,33 @@ function Login() {
 
     const handleLogin = async () => {
 
-        try {
+    try {
 
-            const response = await api.post("/auth/login", loginData);
+        const response = await api.post("/auth/login", loginData);
 
-            localStorage.setItem("token", response.data.token);
-localStorage.setItem("userId", response.data.userId);
-localStorage.setItem("fullName", response.data.fullName);
-localStorage.setItem("email", response.data.email);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
 
-toast.success(`Welcome back, ${response.data.fullName}!`);
+        // Supports both "name" and "fullName"
+        localStorage.setItem(
+            "fullName",
+            response.data.fullName || response.data.name
+        );
 
-navigate("/dashboard");
+        localStorage.setItem("email", response.data.email);
 
-        } catch (error) {
+        toast.success(
+            `Welcome back, ${response.data.fullName || response.data.name}!`
+        );
 
-            alert("Invalid Email or Password");
+        navigate("/dashboard");
 
-            console.error(error);
-        }
+    } catch (error) {
+
+        toast.error("Invalid Email or Password");
+        console.error(error);
+
+    }
     };
 
     return (
@@ -81,6 +89,16 @@ navigate("/dashboard");
                     >
                         Login
                     </button>
+
+                    <p className="text-center text-gray-400 mt-6">
+                        Don't have an account?{" "}
+                        <Link
+                            to="/register"
+                            className="text-blue-400 hover:underline font-medium"
+                        >
+                            Register
+                        </Link>
+                    </p>
 
                 </div>
 

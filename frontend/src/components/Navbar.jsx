@@ -2,17 +2,18 @@ import { useMemo } from "react";
 import {
     Bell,
     Search,
-    LogOut,
     Sun,
     Moon
 } from "lucide-react";
 
 function Navbar() {
 
-    const userName =
-        localStorage.getItem("fullName") ||
-        localStorage.getItem("name") ||
-        "Manikanta";
+    const storedName = localStorage.getItem("fullName");
+
+const userName =
+    storedName && storedName !== "undefined"
+        ? storedName
+        : "Manikanta";
 
     const currentDate = useMemo(() => {
 
@@ -38,15 +39,6 @@ function Navbar() {
 
     const marketOpen =
         currentHour >= 9 && currentHour < 16;
-
-    const handleLogout = () => {
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-
-        window.location.href = "/login";
-
-    };
 
     return (
 
@@ -110,16 +102,6 @@ function Navbar() {
 
                 </button>
 
-                <button
-                    onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 transition px-5 py-2 rounded-xl text-white font-semibold flex items-center gap-2"
-                >
-
-                    <LogOut size={18} />
-
-                    Logout
-
-                </button>
 
             </div>
 

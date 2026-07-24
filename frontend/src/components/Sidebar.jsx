@@ -8,11 +8,31 @@ import {
     LogOut
 } from "lucide-react";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Sidebar() {
 
     const location = useLocation();
+    const navigate = useNavigate();
+
+const storedName = localStorage.getItem("fullName");
+
+const userName =
+    storedName &&
+    storedName !== "undefined" &&
+    storedName !== "null"
+        ? storedName
+        : "Manikanta";
+    const handleLogout = () => {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("fullName");
+        localStorage.removeItem("email");
+
+        navigate("/");
+
+    };
 
     const menuItems = [
 
@@ -58,15 +78,11 @@ function Sidebar() {
                 <div className="p-8 border-b border-slate-800">
 
                     <h1 className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-
                         TradeSense AI
-
                     </h1>
 
                     <p className="text-slate-400 mt-2 text-sm">
-
                         AI Powered Trading Platform
-
                     </p>
 
                 </div>
@@ -77,16 +93,14 @@ function Sidebar() {
 
                         const Icon = item.icon;
 
-                        const active =
-                            location.pathname === item.path;
+                        const active = location.pathname === item.path;
 
                         return (
 
                             <Link
                                 key={item.path}
                                 to={item.path}
-                                className={`flex items-center gap-4 px-5 py-4 rounded-2xl mb-3 transition-all duration-300
-                                ${
+                                className={`flex items-center gap-4 px-5 py-4 rounded-2xl mb-3 transition-all duration-300 ${
                                     active
                                         ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg"
                                         : "text-slate-300 hover:bg-slate-800 hover:text-white"
@@ -96,9 +110,7 @@ function Sidebar() {
                                 <Icon size={22} />
 
                                 <span className="font-medium">
-
                                     {item.name}
-
                                 </span>
 
                             </Link>
@@ -116,20 +128,17 @@ function Sidebar() {
                 <div className="bg-slate-900 rounded-2xl p-4 mb-5">
 
                     <p className="text-white font-semibold">
-
-                        Manikanta
-
+                        {userName}
                     </p>
 
                     <p className="text-green-400 text-sm mt-1">
-
                         ● Online
-
                     </p>
 
                 </div>
 
                 <button
+                    onClick={handleLogout}
                     className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 transition-all text-white py-3 rounded-xl font-semibold"
                 >
 

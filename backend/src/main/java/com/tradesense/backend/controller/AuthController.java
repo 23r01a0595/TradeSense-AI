@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tradesense.backend.dto.LoginRequestDTO;
 import com.tradesense.backend.dto.LoginResponseDTO;
+import com.tradesense.backend.dto.UserRequestDTO;
+import com.tradesense.backend.dto.UserResponseDTO;
 import com.tradesense.backend.service.UserService;
 
 @RestController
@@ -18,6 +20,11 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @PostMapping("/register")
+    public UserResponseDTO register(@RequestBody UserRequestDTO request) {
+        return userService.saveUser(request);
+    }
 
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO request) {
