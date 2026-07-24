@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/api/live";
+const API = "http://https://tradesense-ai-backend-t1on.onrender.com/api/live";
 
 export const getLivePrice = async (symbol) => {
 

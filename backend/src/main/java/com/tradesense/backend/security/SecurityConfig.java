@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,33 +32,28 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> {})
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
 
+                        // Allow all preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
-
                         .requestMatchers("/api/dashboard/**").permitAll()
-
                         .requestMatchers("/api/dashboard-analytics/**").permitAll()
-                        
                         .requestMatchers("/api/stocks/**").permitAll()
-
                         .requestMatchers("/api/portfolio/**").permitAll()
-
                         .requestMatchers("/api/watchlist/**").permitAll()
-
                         .requestMatchers("/api/transactions/**").permitAll()
-
                         .requestMatchers("/api/ai/**").permitAll()
-
                         .requestMatchers("/api/live/**").permitAll()
 
-                        // All remaining APIs require authentication
+                        // Secure everything else
                         .anyRequest().authenticated()
 
                 )
@@ -71,32 +67,34 @@ public class SecurityConfig {
     }
 
     @Bean
-public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.setAllowedOrigins(List.of(
-            "http://localhost:5173",
-            "https://trade-sense-ai-seven.vercel.app"
-    ));
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://*.vercel.app"
+        ));
 
-    configuration.setAllowedMethods(List.of(
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE",
-            "OPTIONS"
-    ));
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+        ));
 
-    configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
-    configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of("Authorization"));
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        configuration.setAllowCredentials(true);
 
-    source.registerCorsConfiguration("/**", configuration);
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-    return source;
-}
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 }

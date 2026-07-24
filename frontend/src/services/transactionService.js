@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/api/transactions";
+const API = "http://https://tradesense-ai-backend-t1on.onrender.com/api/transactions";
 
 export const getTransactions = async (userId) => {
 

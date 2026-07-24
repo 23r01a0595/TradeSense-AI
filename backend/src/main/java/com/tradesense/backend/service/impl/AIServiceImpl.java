@@ -1,6 +1,5 @@
 package com.tradesense.backend.service.impl;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -74,7 +73,7 @@ public class AIServiceImpl implements AIService {
                     .uri(URI.create(apiUrl))
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
-                    .header("HTTP-Referer", "http://localhost:8080")
+                    .header("HTTP-Referer", "http://https://tradesense-ai-backend-t1on.onrender.com")
                     .header("X-Title", "TradeSense AI")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
