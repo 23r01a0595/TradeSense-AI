@@ -33,3 +33,21 @@ build/
 .vscode/
 .vscode/
 database/
+
+# Dependencies
+node_modules/
+
+# Vite cache
+node_modules/.vite/
+.vite/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
