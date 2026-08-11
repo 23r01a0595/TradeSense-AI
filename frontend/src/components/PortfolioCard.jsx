@@ -1,18 +1,30 @@
-import { Landmark, TrendingUp, TrendingDown } from "lucide-react";
+import {
+    Landmark,
+    TrendingUp,
+    TrendingDown
+} from "lucide-react";
 
 function PortfolioCard({ item, onSell }) {
 
-    const investment = item.quantity * item.averageBuyPrice;
+    const investment =
+        Number(item.quantity || 0) *
+        Number(item.averageBuyPrice || 0);
 
-    const currentValue = item.quantity * item.currentPrice;
+    const currentValue =
+        Number(item.quantity || 0) *
+        Number(item.currentPrice || 0);
 
     const profit = currentValue - investment;
 
     const profitColor =
-        profit >= 0 ? "text-green-400" : "text-red-400";
+        profit >= 0
+            ? "text-green-400"
+            : "text-red-400";
 
     const ProfitIcon =
-        profit >= 0 ? TrendingUp : TrendingDown;
+        profit >= 0
+            ? TrendingUp
+            : TrendingDown;
 
     return (
 
@@ -40,6 +52,14 @@ function PortfolioCard({ item, onSell }) {
                         <p className="text-slate-400 mt-1">
                             {item.stockSymbol}
                         </p>
+
+                        {/* Debug Button */}
+                        <button
+                            onClick={onSell}
+                            className="mt-4 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white font-semibold"
+                        >
+                            TEST SELL BUTTON
+                        </button>
 
                     </div>
 
@@ -103,7 +123,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-white font-semibold">
-                            ₹{Number(investment || 0).toFixed(2)}
+                            ₹{investment.toFixed(2)}
                         </span>
 
                     </div>
@@ -115,7 +135,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-white font-semibold">
-                            ₹{Number(currentValue || 0).toFixed(2)}
+                            ₹{currentValue.toFixed(2)}
                         </span>
 
                     </div>
@@ -131,7 +151,7 @@ function PortfolioCard({ item, onSell }) {
                             <ProfitIcon size={18} />
 
                             <span className="font-bold">
-                                ₹{Number(profit || 0).toFixed(2)}
+                                ₹{profit.toFixed(2)}
                             </span>
 
                         </div>
@@ -140,17 +160,19 @@ function PortfolioCard({ item, onSell }) {
 
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mt-8">
+                {/* Main Action Buttons */}
+
+                <div className="mt-8 flex flex-col sm:flex-row gap-4">
 
                     <button
-                        className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold transition"
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold transition"
                     >
                         Buy More
                     </button>
 
                     <button
                         onClick={onSell}
-                        className="bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 font-semibold transition"
+                        className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 font-semibold transition"
                     >
                         Sell Stock
                     </button>
