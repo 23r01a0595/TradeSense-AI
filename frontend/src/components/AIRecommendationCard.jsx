@@ -24,12 +24,12 @@ function AIRecommendationCard({ recommendation }) {
                 <div>
 
                     <h2 className="text-3xl font-bold text-white">
-                        {recommendation.companyName}
-                    </h2>
+    AI Recommendation
+</h2>
 
-                    <p className="text-slate-400">
-                        {recommendation.stockSymbol}
-                    </p>
+<p className="text-slate-400">
+    TradeSense AI Analysis
+</p>
 
                 </div>
 
@@ -86,8 +86,7 @@ function AIRecommendationCard({ recommendation }) {
                     </span>
 
                     <span className="text-green-400 font-semibold">
-                        ₹{recommendation.targetPrice.toFixed(2)}
-                    </span>
+₹{Number(recommendation?.targetPrice || 0).toFixed(2)}                    </span>
 
                 </div>
 
