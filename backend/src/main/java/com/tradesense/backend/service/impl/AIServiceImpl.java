@@ -73,7 +73,7 @@ public class AIServiceImpl implements AIService {
                     .uri(URI.create(apiUrl))
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
-                    .header("HTTP-Referer", "http://https://tradesense-ai-backend-t1on.onrender.com")
+                    .header("HTTP-Referer", "https://trade-sense-ai-seven.vercel.app")
                     .header("X-Title", "TradeSense AI")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
@@ -83,12 +83,23 @@ public class AIServiceImpl implements AIService {
 
             JsonNode root = mapper.readTree(response.body());
 
-            String aiResponse = root
-                    .get("choices")
-                    .get(0)
-                    .get("message")
-                    .get("content")
-                    .asText();
+System.out.println("OpenRouter Response:");
+System.out.println(response.body());
+
+if (!root.has("choices")) {
+
+    throw new RuntimeException(
+            "OpenRouter Error: " + response.body()
+    );
+
+}
+
+String aiResponse = root
+        .get("choices")
+        .get(0)
+        .get("message")
+        .get("content")
+        .asText();
             aiResponse = aiResponse
         .replace("```json", "")
         .replace("```", "")
