@@ -6,15 +6,17 @@ import {
 
 import AnalyticsCard from "./AnalyticsCard";
 
-function PortfolioAnalytics({ portfolio }) {
+function PortfolioAnalytics({ portfolio = [] }) {
 
     const totalInvestment = portfolio.reduce(
-        (sum, item) => sum + item.quantity * item.averageBuyPrice,
+        (sum, item) =>
+            sum + (item.quantity || 0) * (item.averageBuyPrice || 0),
         0
     );
 
     const currentValue = portfolio.reduce(
-        (sum, item) => sum + item.quantity * item.currentPrice,
+        (sum, item) =>
+            sum + (item.quantity || 0) * (item.currentPrice || 0),
         0
     );
 
@@ -26,7 +28,6 @@ function PortfolioAnalytics({ portfolio }) {
             : (profit / totalInvestment) * 100;
 
     return (
-
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
             <AnalyticsCard
@@ -48,8 +49,8 @@ function PortfolioAnalytics({ portfolio }) {
                 value={`₹${profit.toFixed(2)}`}
                 icon={
                     profit >= 0
-                        ? <TrendingUp className="text-green-400"/>
-                        : <TrendingDown className="text-red-400"/>
+                        ? <TrendingUp className="text-green-400" />
+                        : <TrendingDown className="text-red-400" />
                 }
                 color={
                     profit >= 0
@@ -63,8 +64,8 @@ function PortfolioAnalytics({ portfolio }) {
                 value={`${profitPercentage.toFixed(2)} %`}
                 icon={
                     profit >= 0
-                        ? <TrendingUp className="text-green-400"/>
-                        : <TrendingDown className="text-red-400"/>
+                        ? <TrendingUp className="text-green-400" />
+                        : <TrendingDown className="text-red-400" />
                 }
                 color={
                     profit >= 0
@@ -74,9 +75,7 @@ function PortfolioAnalytics({ portfolio }) {
             />
 
         </div>
-
     );
-
 }
 
 export default PortfolioAnalytics;
