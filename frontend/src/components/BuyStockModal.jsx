@@ -47,7 +47,7 @@ function BuyStockModal({ stock, onClose, onBuy }) {
           </p>
 
           <h3 className="text-3xl font-bold text-green-400 mt-2">
-            ₹{stock.currentPrice}
+            ₹{Number(stock?.currentPrice || 0).toFixed(2)}
           </h3>
         </div>
 

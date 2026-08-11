@@ -83,21 +83,21 @@ function Dashboard() {
 
                 <AnalyticsCard
                     title="Portfolio Value"
-                    value={`₹${dashboard.portfolioValue.toFixed(2)}`}
+                    value={`₹${Number(dashboard.portfolioValue || 0).toFixed(2)}`}
                     icon={<Wallet className="text-blue-400" />}
                     color="text-blue-400"
                 />
 
                 <AnalyticsCard
                     title="Investment"
-                    value={`₹${dashboard.totalInvestment.toFixed(2)}`}
+                    value={`₹${Number(dashboard.totalInvestment || 0).toFixed(2)}`}
                     icon={<BarChart3 className="text-green-400" />}
                     color="text-green-400"
                 />
 
                 <AnalyticsCard
                     title="Profit / Loss"
-                    value={`₹${dashboard.profitLoss.toFixed(2)}`}
+                    value={`₹${Number(dashboard.profitLoss || 0).toFixed(2)}`}
                     icon={<TrendingUp className="text-emerald-400" />}
                     color={
                         dashboard.profitLoss >= 0
@@ -108,7 +108,7 @@ function Dashboard() {
 
                 <AnalyticsCard
                     title="Return"
-                    value={`${dashboard.profitLossPercentage.toFixed(2)}%`}
+                    value={`${Number(dashboard.profitLossPercentage || 0).toFixed(2)}%`}
                     icon={<TrendingUp className="text-yellow-400" />}
                     color={
                         dashboard.profitLossPercentage >= 0

@@ -59,7 +59,7 @@ function WatchlistCard({ stock, onRemove }) {
                     </span>
 
                     <span className="text-green-400 font-semibold">
-                        ₹{stock.currentPrice.toFixed(2)}
+                        ₹{Number(stock.currentPrice || 0).toFixed(2)}
                     </span>
 
                 </div>

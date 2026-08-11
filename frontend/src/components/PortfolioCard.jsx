@@ -79,7 +79,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-green-400 font-semibold">
-                            ₹{item.averageBuyPrice.toFixed(2)}
+                            ₹{Number(item.averageBuyPrice || 0).toFixed(2)}
                         </span>
 
                     </div>
@@ -91,7 +91,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-blue-400 font-semibold">
-                            ₹{item.currentPrice.toFixed(2)}
+                            ₹{Number(item.currentPrice || 0).toFixed(2)}
                         </span>
 
                     </div>
@@ -103,7 +103,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-white font-semibold">
-                            ₹{investment.toFixed(2)}
+                            ₹{Number(investment || 0).toFixed(2)}
                         </span>
 
                     </div>
@@ -115,7 +115,7 @@ function PortfolioCard({ item, onSell }) {
                         </span>
 
                         <span className="text-white font-semibold">
-                            ₹{currentValue.toFixed(2)}
+                            ₹{Number(currentValue || 0).toFixed(2)}
                         </span>
 
                     </div>
@@ -131,7 +131,7 @@ function PortfolioCard({ item, onSell }) {
                             <ProfitIcon size={18} />
 
                             <span className="font-bold">
-                                ₹{profit.toFixed(2)}
+                                ₹{Number(profit || 0).toFixed(2)}
                             </span>
 
                         </div>

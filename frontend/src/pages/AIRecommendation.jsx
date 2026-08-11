@@ -120,7 +120,7 @@ function AIRecommendation() {
 
                                     <p className="text-green-400 mt-2 font-semibold">
 
-                                        ₹{stock.currentPrice.toFixed(2)}
+                                        ₹{Number(stock.currentPrice || 0).toFixed(2)}
 
                                     </p>
 
