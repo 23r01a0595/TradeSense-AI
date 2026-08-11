@@ -6,23 +6,26 @@ function SummaryCard({ title, value, color = "text-white", icon }) {
 
     return (
 
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
+        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 md:p-6 shadow-lg hover:shadow-xl transition">
 
             <div className="flex items-center justify-between">
 
                 <div>
 
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-400 text-sm md:text-base">
                         {title}
                     </p>
 
-                    <h2 className={`text-3xl font-bold mt-2 ${color}`}>
+                    <h2 className={`text-2xl md:text-3xl font-bold mt-2 ${color}`}>
                         {value}
                     </h2>
 
                 </div>
 
-                <Icon size={36} className={color} />
+                <Icon
+                    size={28}
+                    className={color}
+                />
 
             </div>
 

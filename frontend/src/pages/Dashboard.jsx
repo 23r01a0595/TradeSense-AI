@@ -65,14 +65,21 @@ function Dashboard() {
 
             <div className="mb-10">
 
-                <h1 className="text-5xl font-bold text-white">
+                <h1 className="
+    text-3xl
+    md:text-5xl
+    font-bold
+    text-white
+">
+    TradeSense AI Dashboard
+</h1>
 
-                    📊 TradeSense AI Dashboard
-
-                </h1>
-
-                <p className="text-slate-400 mt-3 text-lg">
-
+<p className="
+    text-slate-400
+    mt-2
+    text-base
+    md:text-xl
+">
                     Monitor your portfolio with live market insights and AI.
 
                 </p>
