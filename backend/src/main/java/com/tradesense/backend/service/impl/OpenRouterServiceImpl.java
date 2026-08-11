@@ -75,9 +75,7 @@ public class OpenRouterServiceImpl implements OpenRouterService {
                     .uri(URI.create(apiUrl))
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
-                    .header("HTTP-Referer", "http://https://tradesense-ai-backend-t1on.onrender.com")
-                    .header("X-Title", "TradeSense AI")
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
+.header("HTTP-Referer", "https://trade-sense-ai-seven.vercel.app")                    .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 
             HttpResponse<String> response =
