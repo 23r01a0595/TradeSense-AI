@@ -1,1 +1,4 @@
 .vscode/
+node_m_dules/
+frontend/node_modules/
+backend/node_modules/
