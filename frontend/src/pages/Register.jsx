@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
+import { toast } from "react-hot-toast";
 
 function Register() {
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
 
     const [userData, setUserData] = useState({
         fullName: "",
@@ -19,21 +22,35 @@ function Register() {
     };
 
     const handleRegister = async () => {
-        try {
-            await api.post("/auth/register", userData);
+        setLoading(true);
 
-            alert("Registration Successful!");
+        try {
+            await api.post(
+                "/auth/register",
+                userData
+            );
+
+            toast.success(
+                "Registration Successful!"
+            );
 
             navigate("/");
         } catch (error) {
-            alert("Registration Failed");
+            toast.error(
+                "Registration Failed"
+            );
+
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-900">
-            <div className="w-96 bg-slate-800 p-8 rounded-xl shadow-xl">
+        <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
+
+            <div className="w-full max-w-md bg-slate-800 p-8 rounded-xl shadow-xl">
+
                 <h1 className="text-3xl font-bold text-blue-400 text-center">
                     TradeSense AI
                 </h1>
@@ -43,6 +60,7 @@ function Register() {
                 </p>
 
                 <div className="mt-6 space-y-4">
+
                     <input
                         type="text"
                         name="fullName"
@@ -72,18 +90,31 @@ function Register() {
 
                     <button
                         onClick={handleRegister}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded"
+                        disabled={loading}
+                        className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white p-3 rounded flex items-center justify-center gap-3 font-semibold"
                     >
-                        Register
+                        {loading ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Creating Account...
+                            </>
+                        ) : (
+                            "Register"
+                        )}
                     </button>
 
                     <p className="text-center text-gray-400">
                         Already have an account?{" "}
-                        <Link to="/" className="text-blue-400 hover:underline">
+                        <Link
+                            to="/"
+                            className="text-blue-400 hover:underline"
+                        >
                             Login
                         </Link>
                     </p>
+
                 </div>
+
             </div>
         </div>
     );

@@ -4,8 +4,9 @@ import api from "../services/api";
 import { toast } from "react-hot-toast";
 
 function Login() {
-
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
 
     const [loginData, setLoginData] = useState({
         email: "",
@@ -20,40 +21,57 @@ function Login() {
     };
 
     const handleLogin = async () => {
+        setLoading(true);
 
-    try {
+        try {
+            const response = await api.post(
+                "/auth/login",
+                loginData
+            );
 
-        const response = await api.post("/auth/login", loginData);
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem(
+                "userId",
+                response.data.userId
+            );
 
-        // Supports both "name" and "fullName"
-        localStorage.setItem(
-            "fullName",
-            response.data.fullName || response.data.name
-        );
+            localStorage.setItem(
+                "fullName",
+                response.data.fullName ||
+                    response.data.name
+            );
 
-        localStorage.setItem("email", response.data.email);
+            localStorage.setItem(
+                "email",
+                response.data.email
+            );
 
-        toast.success(
-            `Welcome back, ${response.data.fullName || response.data.name}!`
-        );
+            toast.success(
+                `Welcome back, ${
+                    response.data.fullName ||
+                    response.data.name
+                }!`
+            );
 
-        navigate("/dashboard");
+            navigate("/dashboard");
+        } catch (error) {
+            toast.error(
+                "Invalid Email or Password"
+            );
 
-    } catch (error) {
-
-        toast.error("Invalid Email or Password");
-        console.error(error);
-
-    }
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-
-            <div className="bg-slate-800 w-96 rounded-2xl shadow-xl p-8">
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
+            <div className="bg-slate-800 w-full max-w-md rounded-2xl shadow-xl p-8">
 
                 <h1 className="text-4xl font-bold text-blue-400 text-center">
                     TradeSense AI
@@ -85,9 +103,17 @@ function Login() {
 
                     <button
                         onClick={handleLogin}
-                        className="w-full bg-blue-500 hover:bg-blue-600 py-3 rounded-lg text-white font-semibold"
+                        disabled={loading}
+                        className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed py-3 rounded-lg text-white font-semibold flex items-center justify-center gap-3"
                     >
-                        Login
+                        {loading ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Logging In...
+                            </>
+                        ) : (
+                            "Login"
+                        )}
                     </button>
 
                     <p className="text-center text-gray-400 mt-6">
@@ -101,9 +127,7 @@ function Login() {
                     </p>
 
                 </div>
-
             </div>
-
         </div>
     );
 }
